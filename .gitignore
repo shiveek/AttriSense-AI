@@ -16,6 +16,8 @@ model/*.pkl
 # IDE
 .vscode/
 
-# OS
+# OS & DB
 Thumbs.db
 .DS_Store
+*.db
+*.log

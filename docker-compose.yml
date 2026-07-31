@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: attrisense_db
+    restart: always
+    environment:
+      POSTGRES_USER: attrisense_user
+      POSTGRES_PASSWORD: attrisense_password
+      POSTGRES_DB: attrisense_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U attrisense_user -d attrisense_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: attrisense_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: attrisense_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/workspace/backend
+    environment:
+      - DATABASE_URL=postgresql://attrisense_user:attrisense_password@db:5432/attrisense_db
+      - REDIS_URL=redis://redis:6379/0
+      - JWT_SECRET=supersecretjwtkeyforattrisense123!
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health/')"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  worker:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: attrisense_worker
+    restart: always
+    command: celery -A backend.app.tasks.tasks worker --loglevel=info
+    volumes:
+      - ./backend:/workspace/backend
+    environment:
+      - DATABASE_URL=postgresql://attrisense_user:attrisense_password@db:5432/attrisense_db
+      - REDIS_URL=redis://redis:6379/0
+      - JWT_SECRET=supersecretjwtkeyforattrisense123!
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: attrisense_frontend
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      - VITE_API_URL=http://localhost:8000/api
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
