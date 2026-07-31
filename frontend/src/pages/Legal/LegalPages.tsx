@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShieldCheck, FileText, Landmark, Cookie, ArrowLeft } from "lucide-react";
 import MainLayout from "../../components/layout/MainLayout";

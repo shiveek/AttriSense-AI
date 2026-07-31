@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Shield, BrainCircuit, LineChart, FileSpreadsheet, Activity, HelpCircle, ArrowRight, BookOpen, Lock, ShieldAlert, Cpu } from "lucide-react";

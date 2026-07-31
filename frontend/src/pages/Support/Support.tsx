@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Mail, MessageSquare, ShieldAlert, ArrowLeft, Loader2, CheckCircle2 } from "lucide-react";
+import { MessageSquare, ShieldAlert, ArrowLeft, Loader2, CheckCircle2 } from "lucide-react";
 import MainLayout from "../../components/layout/MainLayout";
 import toast from "react-hot-toast";
 
@@ -27,7 +27,7 @@ const Support = () => {
     }
   });
 
-  const onSubmit = async (data: SupportFormInputs) => {
+  const onSubmit = async (_data: SupportFormInputs) => {
     setLoading(true);
     // Simulate API delivery
     await new Promise(resolve => setTimeout(resolve, 1500));
