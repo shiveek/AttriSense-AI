@@ -15,8 +15,11 @@ from backend.app.core.auth import (
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
+from sqlalchemy import func
+
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def register(user_data: UserCreate, db: Session = Depends(get_db)):
+    normalized_email = user_data.email.strip().lower()
     # Restrict public registration from assigning Admin role
     if user_data.role_name not in ["HR_Manager", "Analyst", "User"]:
         raise HTTPException(
@@ -25,7 +28,7 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
         )
 
     # Check if user already exists
-    existing_user = db.query(User).filter(User.email == user_data.email).first()
+    existing_user = db.query(User).filter(func.lower(User.email) == normalized_email).first()
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -44,7 +47,7 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
     # Create User
     hashed_pw = get_password_hash(user_data.password)
     new_user = User(
-        email=user_data.email,
+        email=normalized_email,
         hashed_password=hashed_pw,
         full_name=user_data.full_name,
         role_id=role.id,
@@ -67,7 +70,8 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=TokenResponse)
 def login(login_data: UserLogin, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == login_data.email).first()
+    normalized_email = login_data.email.strip().lower()
+    user = db.query(User).filter(func.lower(User.email) == normalized_email).first()
     if not user or not verify_password(login_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
