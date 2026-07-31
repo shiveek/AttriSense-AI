@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application files
 COPY backend/app/ ./backend/app/
 COPY dataset/ ./dataset/
-COPY model/ ./model/
+RUN mkdir -p model
 
 ENV PYTHONPATH=/workspace
 ENV PORT=8000

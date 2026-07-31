@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy backend app and structural directories
 COPY backend/app/ ./backend/app/
 COPY dataset/ ./dataset/
-COPY model/ ./model/
+RUN mkdir -p model
 
 # Set Python Path to workspace so backend.app is importable
 ENV PYTHONPATH=/workspace
