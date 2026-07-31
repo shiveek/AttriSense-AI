@@ -40,6 +40,7 @@ services:
       - DATABASE_URL=postgresql://attrisense_user:attrisense_password@db:5432/attrisense_db
       - REDIS_URL=redis://redis:6379/0
       - JWT_SECRET=supersecretjwtkeyforattrisense123!
+      - ALLOWED_ORIGINS=*
       - PYTHONUNBUFFERED=1
     depends_on:
       db:
@@ -76,12 +77,14 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=/api
     container_name: attrisense_frontend
     restart: always
     ports:
       - "80:80"
     environment:
-      - VITE_API_URL=http://localhost:8000/api
+      - VITE_API_URL=/api
     depends_on:
       backend:
         condition: service_healthy

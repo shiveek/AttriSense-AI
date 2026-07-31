@@ -28,7 +28,14 @@ const Register = () => {
       toast.success("Account registered successfully! Please sign in.", { id: toastId });
       navigate("/login");
     } catch (err: any) {
-      const errMsg = err.response?.data?.detail || "Registration failed. Please check inputs.";
+      let errMsg = err.response?.data?.detail;
+      if (!errMsg) {
+        if (err.code === "ERR_NETWORK" || !err.response) {
+          errMsg = "Cannot connect to backend API server. Please check backend connection and IP.";
+        } else {
+          errMsg = "Registration failed. Please check inputs.";
+        }
+      }
       toast.error(errMsg, { id: toastId });
     } finally {
       setLoading(false);
