@@ -1,23 +1,28 @@
 services:
-  # --- Backend Web Service ---
+  # --- Backend FastAPI Web Service ---
   - type: web
     name: attrisense-backend
     env: python
-    buildCommand: pip install -r backend/requirements.txt
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
     startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.0
+        value: 3.11.9
       - key: PYTHONPATH
         value: .
+      - key: ENV
+        value: production
       - key: JWT_SECRET
         generateValue: true
       - key: ALLOWED_ORIGINS
-        value: "*"
+        value: "https://attrisense-ai.vercel.app,http://localhost:5173,http://localhost:3000"
       - key: DATABASE_URL
         value: sqlite:///./attrisense.db
 
-  # --- Frontend Static Site ---
+  # --- Frontend Static Site (Vercel primary, Render static fallback) ---
   - type: static
     name: attrisense-frontend
     buildCommand: cd frontend && npm install && npm run build

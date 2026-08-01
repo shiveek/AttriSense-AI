@@ -11,8 +11,8 @@ import type {
 } from "../types";
 import { useAuthStore } from "../store/authStore";
 
-// Base API URL config
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+// Base API URL config - Defaults to deployed Render backend in production
+const API_URL = import.meta.env.VITE_API_URL || "https://attrisense-backend.onrender.com/api";
 
 const api = axios.create({
   baseURL: API_URL,

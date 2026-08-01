@@ -39,9 +39,10 @@ if allowed_origins_env:
     allowed_origins = [origin.strip() for origin in allowed_origins_env.split(",") if origin.strip()]
 else:
     allowed_origins = [
-        "http://localhost:5173",  # Vite dev server
+        "https://attrisense-ai.vercel.app", # Vercel Production Frontend
+        "http://localhost:5173",            # Vite dev server
         "http://localhost:3000",
-        "http://localhost:80",    # Nginx docker-compose
+        "http://localhost:80",              # Nginx docker-compose
         "http://localhost"
     ]
 
@@ -76,6 +77,20 @@ def read_root():
         "app": "AttriSense AI Decision Intelligence Engine",
         "documentation": "/docs"
     }
+
+@app.get("/health", tags=["System Health"])
+def root_health_check():
+    """
+    Direct root health check endpoint for cloud service probes (Render, K8s, AWS ALB).
+    """
+    from backend.app.api.health import get_system_health
+    from backend.app.database.connection import SessionLocal
+    db = SessionLocal()
+    try:
+        return get_system_health(db=db)
+    finally:
+        db.close()
+
 
 def seed_database():
     """
