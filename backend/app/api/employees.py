@@ -112,8 +112,56 @@ def delete_employee(
         )
     return None
 
+import logging
+from backend.app.schemas.schemas import EmployeeCreate, EmployeeUpdate, EmployeeResponse, CsvPreviewResponse
+
+logger = logging.getLogger("AttriSenseAI.Employees")
+
+MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024  # 10MB limit
+
+
+@router.post("/upload/preview", response_model=CsvPreviewResponse)
+async def preview_employees_csv_endpoint(
+    file: UploadFile = File(...),
+    current_user: User = Depends(hr_or_admin_required)
+):
+    """
+    Validates a CSV file and returns preview metadata of the first 10 rows.
+    """
+    filename = file.filename or "uploaded.csv"
+    if not filename.lower().endswith(".csv"):
+        return CsvPreviewResponse(
+            valid=False,
+            filename=filename,
+            total_rows=0,
+            headers=[],
+            missing_required_columns=[],
+            rows_preview=[],
+            detected_encoding="unknown",
+            detected_delimiter="unknown",
+            error_message="Unsupported file format"
+        )
+    
+    file_bytes = await file.read()
+    if len(file_bytes) > MAX_FILE_SIZE_BYTES:
+        return CsvPreviewResponse(
+            valid=False,
+            filename=filename,
+            total_rows=0,
+            headers=[],
+            missing_required_columns=[],
+            rows_preview=[],
+            detected_encoding="unknown",
+            detected_delimiter="unknown",
+            error_message="File exceeds maximum upload size"
+        )
+
+    res = employee_service.preview_employees_csv(file_bytes, filename)
+    return res
+
+
 @router.post("/upload", response_model=Dict[str, Any])
-def upload_employees_csv(
+async def upload_employees_csv(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(hr_or_admin_required)
@@ -122,17 +170,32 @@ def upload_employees_csv(
     Ingests a CSV file of employee profiles, runs predictions, and saves records in bulk.
     Requires Admin or HR_Manager role.
     """
-    if not file.filename.endswith(".csv"):
+    filename = file.filename or ""
+    if not filename.lower().endswith(".csv"):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid file format. Only CSV files are accepted."
+            detail="Unsupported file format"
         )
-    try:
-        content = file.file.read().decode("utf-8")
-        result = employee_service.import_employees_csv(db, content)
-        return result
-    except Exception as e:
+    
+    file_bytes = await file.read()
+    if len(file_bytes) > MAX_FILE_SIZE_BYTES:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"CSV processing failed: {str(e)}"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="File exceeds maximum upload size"
         )
+
+    try:
+        result = employee_service.import_employees_csv(db, file_bytes)
+        return result
+    except ValueError as ve:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(ve)
+        )
+    except Exception as e:
+        logger.error(f"CSV Ingestion failed: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Failed to process CSV file. Unsupported file format or invalid structure."
+        )
+

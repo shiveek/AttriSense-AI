@@ -376,6 +376,27 @@ export const EmployeeAPI = {
     }
   },
 
+  previewCsv: async (file: File): Promise<{
+    valid: boolean;
+    filename: string;
+    total_rows: number;
+    headers: string[];
+    missing_required_columns: string[];
+    rows_preview: Record<string, any>[];
+    detected_encoding: string;
+    detected_delimiter: string;
+    error_message?: string;
+  }> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await api.post("/employees/upload/preview", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    });
+    return response.data;
+  },
+
   uploadCsv: async (file: File): Promise<{ success_count: number; error_count: number; errors: string[] }> => {
     const formData = new FormData();
     formData.append("file", file);
@@ -388,8 +409,41 @@ export const EmployeeAPI = {
   }
 };
 
+export const SupportAPI = {
+  submitTicket: async (data: any): Promise<any> => {
+    const response = await api.post("/support/tickets", data);
+    return response.data;
+  },
+
+  reportBug: async (data: any): Promise<any> => {
+    const response = await api.post("/support/bug-report", data);
+    return response.data;
+  },
+
+  submitFeatureRequest: async (data: any): Promise<any> => {
+    const response = await api.post("/support/feature-request", data);
+    return response.data;
+  },
+
+  submitContactForm: async (data: any): Promise<any> => {
+    const response = await api.post("/support/contact", data);
+    return response.data;
+  },
+
+  getUserTickets: async (): Promise<any[]> => {
+    const response = await api.get("/support/tickets");
+    return response.data;
+  },
+
+  getSystemStatus: async (): Promise<any> => {
+    const response = await api.get("/support/status");
+    return response.data;
+  }
+};
+
 export const DashboardAPI = {
   getStats: async (): Promise<DashboardStats> => {
+
     try {
       const response = await api.get("/dashboard/stats");
       return response.data;

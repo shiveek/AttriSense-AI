@@ -139,5 +139,74 @@ class ProductionVerificationTests(unittest.TestCase):
         self.assertEqual(res["database"], "online")
         self.assertIn(res["status"], ["healthy", "degraded"])  # ML engine might be offline in mock env
 
+    def test_6_csv_validation_missing_required_column(self):
+        """
+        Verify that uploading a CSV with missing required columns raises a friendly error message.
+        """
+        from backend.app.services.employee_service import import_employees_csv, preview_employees_csv
+
+        # CSV missing 'MonthlyIncome'
+        invalid_csv = "EmployeeID,Name,Email,Age,Department,JobRole\nEMP1,John Doe,john@test.com,30,IT,Software Engineer"
+        
+        # Test preview
+        preview_res = preview_employees_csv(invalid_csv.encode("utf-8"), "invalid.csv")
+        self.assertFalse(preview_res["valid"])
+        self.assertIn("Missing required column: MonthlyIncome", preview_res["error_message"])
+
+        # Test import error
+        with self.assertRaises(ValueError) as context:
+            import_employees_csv(self.db, invalid_csv.encode("utf-8"))
+        self.assertIn("Missing required column: MonthlyIncome", str(context.exception))
+
+    def test_7_csv_preview_and_decoding(self):
+        """
+        Verify auto-decoding and preview of valid CSV files.
+        """
+        from backend.app.services.employee_service import preview_employees_csv
+        valid_csv = "EmployeeID;Name;Email;Age;Department;JobRole;MonthlyIncome\nEMP200;Jane Smith;jane@test.com;28;Sales;Sales Executive;7500"
+        
+        preview_res = preview_employees_csv(valid_csv.encode("latin1"), "valid_latin1.csv")
+        self.assertTrue(preview_res["valid"])
+        self.assertEqual(preview_res["total_rows"], 1)
+        self.assertEqual(len(preview_res["rows_preview"]), 1)
+        self.assertEqual(preview_res["rows_preview"][0]["Name"], "Jane Smith")
+
+    def test_8_support_ticket_creation(self):
+        """
+        Verify support ticket and bug report API processing.
+        """
+        from backend.app.schemas.schemas import SupportTicketCreate, BugReportCreate
+        from backend.app.api.support import create_support_ticket, submit_bug_report
+
+        ticket_payload = SupportTicketCreate(
+            name="Alice Admin",
+            email="alice@attrisense.com",
+            category="CSV Ingestion",
+            priority="High",
+            subject="Bulk Ingestion Question",
+            description="Need guidance on custom column headers."
+        )
+
+        ticket_res = create_support_ticket(ticket_payload, self.db)
+        self.assertIsNotNone(ticket_res.ticket_number)
+        self.assertTrue(ticket_res.ticket_number.startswith("AS-SUPP-"))
+        self.assertEqual(ticket_res.user_email, "alice@attrisense.com")
+
+        bug_payload = BugReportCreate(
+            name="Bob User",
+            email="bob@attrisense.com",
+            module="CSV Ingestion",
+            severity="Critical",
+            subject="Parse Timeout",
+            description="Large file parsing error.",
+            steps_to_reproduce="Upload 10k row file",
+            expected_behavior="Parse within 2s",
+            actual_behavior="Took 15s"
+        )
+        bug_res = submit_bug_report(bug_payload, self.db)
+        self.assertIsNotNone(bug_res.ticket_number)
+        self.assertTrue(bug_res.ticket_number.startswith("AS-BUG-"))
+
 if __name__ == "__main__":
     unittest.main()
+

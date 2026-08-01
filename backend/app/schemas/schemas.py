@@ -220,3 +220,70 @@ class AIInsightResponse(BaseModel):
     category: str
     impact: str # High, Medium, Low
     recommendation: str
+
+# Support & Help Schemas
+class SupportTicketCreate(BaseModel):
+    name: Optional[str] = None
+    email: EmailStr
+    category: str
+    priority: Optional[str] = "Medium"
+    subject: str
+    description: str
+    attachment_name: Optional[str] = None
+
+class BugReportCreate(BaseModel):
+    name: Optional[str] = None
+    email: EmailStr
+    module: Optional[str] = "General"
+    severity: Optional[str] = "High"
+    subject: str
+    description: str
+    steps_to_reproduce: Optional[str] = None
+    expected_behavior: Optional[str] = None
+    actual_behavior: Optional[str] = None
+    attachment_name: Optional[str] = None
+
+class FeatureRequestCreate(BaseModel):
+    name: Optional[str] = None
+    email: EmailStr
+    category: Optional[str] = "General"
+    subject: str
+    description: str
+    business_impact: Optional[str] = None
+
+class ContactFormCreate(BaseModel):
+    name: str
+    email: EmailStr
+    subject: str
+    message: str
+
+class SupportTicketResponse(BaseModel):
+    id: int
+    ticket_number: str
+    type: str
+    user_email: str
+    name: Optional[str] = None
+    category: str
+    priority: str
+    subject: str
+    description: str
+    attachment_name: Optional[str] = None
+    status: str
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# CSV Preview Schemas
+class CsvPreviewResponse(BaseModel):
+    valid: bool
+    filename: str
+    total_rows: int
+    headers: List[str]
+    missing_required_columns: List[str]
+    rows_preview: List[Dict[str, Any]]
+    detected_encoding: str
+    detected_delimiter: str
+    error_message: Optional[str] = None
+

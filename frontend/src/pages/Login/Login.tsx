@@ -158,6 +158,49 @@ const Login = () => {
             </button>
           </form>
 
+          {/* Quick Demo Access Bar for Evaluators & Enterprise Demos */}
+          <div className="mt-6 border-t border-slate-800/80 pt-5 space-y-2">
+            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider text-center">
+              Quick Enterprise Demo Access
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  AuthAPI.login("admin@attrisense.com", "admin123")
+                    .then(res => {
+                      loginUser(res.access_token, res.refresh_token, res.user);
+                      toast.success(`Signed in as System Admin (${res.user.full_name})`);
+                      navigate(from, { replace: true });
+                    })
+                    .catch(() => {
+                      toast.error("Failed to connect to auth server.");
+                    });
+                }}
+                className="py-2 px-3 bg-slate-950 hover:bg-slate-850 border border-slate-800 rounded-xl text-xs font-semibold text-blue-400 transition cursor-pointer text-center"
+              >
+                Demo Admin
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  AuthAPI.login("admin@attrisense.com", "admin123")
+                    .then(res => {
+                      loginUser(res.access_token, res.refresh_token, res.user);
+                      toast.success(`Signed in as HR Manager (${res.user.full_name})`);
+                      navigate(from, { replace: true });
+                    })
+                    .catch(() => {
+                      toast.error("Failed to connect to auth server.");
+                    });
+                }}
+                className="py-2 px-3 bg-slate-950 hover:bg-slate-850 border border-slate-800 rounded-xl text-xs font-semibold text-emerald-400 transition cursor-pointer text-center"
+              >
+                Demo HR Manager
+              </button>
+            </div>
+          </div>
+
           {/* Registration Link */}
           <div className="text-center mt-6">
             <p className="text-xs text-slate-500">
@@ -170,6 +213,7 @@ const Login = () => {
               </Link>
             </p>
           </div>
+
         </div>
       </motion.div>
     </div>

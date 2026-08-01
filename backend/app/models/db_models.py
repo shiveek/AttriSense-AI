@@ -167,3 +167,22 @@ class Report(Base):
 
     # Relationships
     creator = relationship("User", back_populates="reports")
+
+
+class SupportTicket(Base):
+    __tablename__ = "support_tickets"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    ticket_number = Column(String, unique=True, index=True, nullable=False)
+    type = Column(String, nullable=False, default="Support Ticket") # Support Ticket, Bug Report, Feature Request, Contact
+    user_email = Column(String, nullable=False, index=True)
+    name = Column(String, nullable=True)
+    category = Column(String, nullable=False)
+    priority = Column(String, default="Medium") # Low, Medium, High, Urgent
+    subject = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    attachment_name = Column(String, nullable=True)
+    status = Column(String, default="Open") # Open, In Progress, Resolved, Closed
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+

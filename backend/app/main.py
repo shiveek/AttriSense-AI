@@ -15,7 +15,9 @@ from backend.app.api.reports import router as reports_router
 from backend.app.api.notifications import router as notifications_router
 from backend.app.api.audit_logs import router as audit_logs_router
 from backend.app.api.health import router as health_router
+from backend.app.api.support import router as support_router
 from backend.app.ml.generate_dataset import generate_employee_dataset
+
 from backend.app.ml.pipeline import train_attrition_model
 from backend.app.schemas.schemas import EmployeeCreate
 from backend.app.services.employee_service import create_employee, get_employee_by_id
@@ -69,6 +71,8 @@ app.include_router(reports_router, prefix="/api")
 app.include_router(notifications_router, prefix="/api")
 app.include_router(audit_logs_router, prefix="/api")
 app.include_router(health_router, prefix="/api")
+app.include_router(support_router, prefix="/api")
+
 
 @app.get("/health", tags=["System Health"])
 def root_health_check():
