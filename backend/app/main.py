@@ -70,14 +70,6 @@ app.include_router(notifications_router, prefix="/api")
 app.include_router(audit_logs_router, prefix="/api")
 app.include_router(health_router, prefix="/api")
 
-@app.get("/")
-def read_root():
-    return {
-        "status": "online",
-        "app": "AttriSense AI Decision Intelligence Engine",
-        "documentation": "/docs"
-    }
-
 @app.get("/health", tags=["System Health"])
 def root_health_check():
     """
@@ -90,6 +82,38 @@ def root_health_check():
         return get_system_health(db=db)
     finally:
         db.close()
+
+# --- Full-Stack Single URL Integration: Mount React Frontend Build ---
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from fastapi import HTTPException
+
+frontend_dist_path = os.path.join(os.getcwd(), "frontend", "dist")
+if os.path.exists(frontend_dist_path):
+    logger.info(f"Serving static frontend build from {frontend_dist_path}")
+    assets_path = os.path.join(frontend_dist_path, "assets")
+    if os.path.exists(assets_path):
+        app.mount("/assets", StaticFiles(directory=assets_path), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        # Exclude API endpoints, Swagger docs, openapi.json, and health checks
+        if full_path.startswith("api") or full_path.startswith("docs") or full_path == "openapi.json" or full_path.startswith("health"):
+            raise HTTPException(status_code=404, detail="API endpoint not found")
+        
+        file_path = os.path.join(frontend_dist_path, full_path)
+        if full_path and os.path.exists(file_path) and os.path.isfile(file_path):
+            return FileResponse(file_path)
+        return FileResponse(os.path.join(frontend_dist_path, "index.html"))
+else:
+    @app.get("/")
+    def read_root():
+        return {
+            "status": "online",
+            "app": "AttriSense AI Decision Intelligence Engine",
+            "documentation": "/docs"
+        }
+
 
 
 def seed_database():
