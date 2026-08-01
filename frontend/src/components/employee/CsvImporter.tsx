@@ -180,23 +180,23 @@ const CsvImporter = ({ onSuccess }: CsvImporterProps) => {
   };
 
   return (
-    <div className="bg-slate-900/60 border border-slate-800 shadow-xl rounded-3xl p-6 md:p-8 space-y-6">
+    <div className="bg-white border border-slate-200 shadow-sm rounded-3xl p-6 md:p-8 space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-slate-800/80 pb-5">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 bg-blue-500/10 border border-blue-500/20 rounded-2xl flex items-center justify-center text-blue-400">
+          <div className="h-10 w-10 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-center text-blue-600">
             <FileSpreadsheet size={20} />
           </div>
           <div>
-            <h2 className="text-lg font-extrabold text-slate-100">Bulk Directory Ingestion</h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <h2 className="text-lg font-extrabold text-slate-900">Bulk Directory Ingestion</h2>
+            <p className="text-xs text-slate-500 mt-0.5">
               Upload multi-record CSV files for automated batch prediction and workforce analytics.
             </p>
           </div>
         </div>
         <button
           onClick={downloadTemplate}
-          className="text-xs text-blue-400 hover:text-blue-300 font-semibold cursor-pointer border border-blue-500/20 hover:border-blue-500/40 rounded-xl px-4 py-2 bg-blue-500/5 hover:bg-blue-500/10 transition duration-200 flex items-center gap-1.5 self-start sm:self-auto"
+          className="text-xs text-blue-600 hover:text-blue-700 font-bold cursor-pointer border border-blue-200 hover:border-blue-300 rounded-xl px-4 py-2 bg-blue-50 hover:bg-blue-100/60 transition duration-200 flex items-center gap-1.5 self-start sm:self-auto shadow-sm"
         >
           <FileText size={14} />
           Download CSV Template
@@ -213,8 +213,8 @@ const CsvImporter = ({ onSuccess }: CsvImporterProps) => {
           onClick={onButtonClick}
           className={`border-2 border-dashed rounded-3xl p-10 flex flex-col items-center justify-center cursor-pointer transition duration-300 ${
             dragActive
-              ? "border-blue-500 bg-blue-500/10"
-              : "border-slate-800 hover:border-blue-500/50 hover:bg-slate-850/50"
+              ? "border-blue-500 bg-blue-50/60"
+              : "border-slate-300 hover:border-blue-400 hover:bg-slate-50/80 bg-slate-50/40"
           }`}
         >
           <input
@@ -224,13 +224,13 @@ const CsvImporter = ({ onSuccess }: CsvImporterProps) => {
             onChange={handleChange}
             className="hidden"
           />
-          <div className="h-14 w-14 rounded-2xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-center text-blue-400 mb-4 shadow-lg">
+          <div className="h-14 w-14 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-blue-600 mb-4 shadow-sm">
             <Upload size={24} />
           </div>
-          <p className="text-sm font-bold text-slate-200">
-            Drag and drop your workforce CSV here, or <span className="text-blue-400 underline">browse</span>
+          <p className="text-sm font-bold text-slate-800">
+            Drag and drop your workforce CSV here, or <span className="text-blue-600 underline">browse</span>
           </p>
-          <p className="text-xs text-slate-400 mt-1.5 flex items-center gap-2">
+          <p className="text-xs text-slate-500 mt-1.5 flex items-center gap-2">
             <span>Supports UTF-8 / Latin-1 CSV up to 10MB</span>
             <span>•</span>
             <span>Auto-detects delimiters (comma, semicolon, tab)</span>
@@ -239,24 +239,24 @@ const CsvImporter = ({ onSuccess }: CsvImporterProps) => {
       ) : (
         <div className="space-y-5">
           {/* File Card Header */}
-          <div className="border border-slate-800 rounded-2xl p-4 bg-slate-950/60 flex items-center justify-between">
+          <div className="border border-slate-200 rounded-2xl p-4 bg-slate-50/60 flex items-center justify-between shadow-sm">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-center justify-center text-blue-400">
+              <div className="h-10 w-10 bg-blue-50 border border-blue-100 rounded-xl flex items-center justify-center text-blue-600">
                 <FileText size={20} />
               </div>
               <div>
-                <p className="text-sm font-bold text-slate-100 truncate max-w-[200px] sm:max-w-xs">
+                <p className="text-sm font-bold text-slate-900 truncate max-w-[200px] sm:max-w-xs">
                   {file.name}
                 </p>
-                <p className="text-xs text-slate-400">
-                  {(file.size / 1024).toFixed(1)} KB • {preview?.detected_encoding || "UTF-8"} • Delimiter: [{preview?.detected_delimiter || "Auto"}]
+                <p className="text-xs text-slate-500">
+                  {(file.size / 1024).toFixed(1)} KB • Encoding: {preview?.detected_encoding || "UTF-8"} • Delimiter: [{preview?.detected_delimiter || "Auto"}]
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
               {previewLoading ? (
-                <div className="flex items-center gap-2 text-xs text-blue-400 font-semibold px-3 py-1.5 bg-blue-500/10 rounded-xl">
+                <div className="flex items-center gap-2 text-xs text-blue-700 font-bold px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-xl">
                   <RefreshCw size={14} className="animate-spin" />
                   Validating CSV...
                 </div>
@@ -264,7 +264,7 @@ const CsvImporter = ({ onSuccess }: CsvImporterProps) => {
                 <button
                   onClick={handleUpload}
                   disabled={loading}
-                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white rounded-xl text-xs font-bold transition disabled:opacity-50 flex items-center gap-2 shadow-lg shadow-blue-600/20 cursor-pointer"
+                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl text-xs font-bold transition disabled:opacity-50 flex items-center gap-2 shadow-sm cursor-pointer"
                 >
                   {loading ? <RefreshCw size={14} className="animate-spin" /> : <Database size={14} />}
                   {loading ? "Ingesting..." : "Upload & Analyze"}
@@ -274,7 +274,7 @@ const CsvImporter = ({ onSuccess }: CsvImporterProps) => {
               <button
                 onClick={removeFile}
                 disabled={loading}
-                className="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 border border-slate-800 hover:border-rose-500/20 rounded-xl transition cursor-pointer"
+                className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 hover:border-rose-200 rounded-xl transition cursor-pointer"
                 title="Remove File"
               >
                 <X size={16} />
@@ -284,15 +284,15 @@ const CsvImporter = ({ onSuccess }: CsvImporterProps) => {
 
           {/* Validation Alert Status Banner */}
           {preview && !preview.valid && (
-            <div className="bg-rose-950/30 border border-rose-800/40 rounded-2xl p-4 flex items-start gap-3 text-rose-300">
-              <AlertTriangle size={20} className="text-rose-400 shrink-0 mt-0.5" />
+            <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 flex items-start gap-3 text-rose-900 shadow-sm">
+              <AlertTriangle size={20} className="text-rose-600 shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-rose-200">Validation Failure</h4>
-                <p className="text-xs leading-relaxed font-semibold">
+                <h4 className="text-xs font-extrabold uppercase tracking-wider text-rose-800">Validation Failure</h4>
+                <p className="text-xs leading-relaxed font-semibold text-rose-900">
                   {preview.error_message || "Invalid CSV structure."}
                 </p>
                 {preview.missing_required_columns && preview.missing_required_columns.length > 0 && (
-                  <p className="text-[11px] text-rose-400/90 mt-1">
+                  <p className="text-[11px] text-rose-700 mt-1">
                     Missing required fields: <b>{preview.missing_required_columns.join(", ")}</b>. Expected columns include: MonthlyIncome, Age, Department, JobRole.
                   </p>
                 )}
@@ -304,33 +304,33 @@ const CsvImporter = ({ onSuccess }: CsvImporterProps) => {
           {preview?.valid && preview.rows_preview && preview.rows_preview.length > 0 && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-xs font-bold text-slate-300">
-                  <Eye size={14} className="text-blue-400" />
+                <div className="flex items-center gap-2 text-xs font-bold text-slate-800">
+                  <Eye size={14} className="text-blue-600" />
                   CSV Data Preview (First {preview.rows_preview.length} of {preview.total_rows} Records)
                 </div>
-                <span className="text-[11px] px-2.5 py-0.5 bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20 rounded-full flex items-center gap-1">
+                <span className="text-[11px] px-2.5 py-0.5 bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 rounded-full flex items-center gap-1">
                   <CheckCircle2 size={12} /> Structure Valid
                 </span>
               </div>
 
-              <div className="overflow-x-auto border border-slate-800 rounded-2xl max-h-64 bg-slate-950/80">
-                <table className="w-full text-left text-xs text-slate-300">
-                  <thead className="bg-slate-900 text-slate-400 font-semibold sticky top-0 border-b border-slate-800">
+              <div className="overflow-x-auto border border-slate-200 rounded-2xl max-h-64 bg-white shadow-sm">
+                <table className="w-full text-left text-xs text-slate-800">
+                  <thead className="bg-slate-100 text-slate-700 font-bold sticky top-0 border-b border-slate-200">
                     <tr>
-                      <th className="py-2.5 px-3 border-r border-slate-800 text-[11px] uppercase">#</th>
+                      <th className="py-2.5 px-3 border-r border-slate-200 text-[11px] uppercase">#</th>
                       {preview.headers.map((h, i) => (
-                        <th key={i} className="py-2.5 px-3 border-r border-slate-800 whitespace-nowrap text-[11px] uppercase font-bold text-slate-200">
+                        <th key={i} className="py-2.5 px-3 border-r border-slate-200 whitespace-nowrap text-[11px] uppercase font-bold text-slate-900">
                           {h}
                         </th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60 font-mono text-[11px]">
+                  <tbody className="divide-y divide-slate-200 font-mono text-[11px]">
                     {preview.rows_preview.map((row, rIdx) => (
-                      <tr key={rIdx} className="hover:bg-slate-900/50 transition">
-                        <td className="py-2 px-3 border-r border-slate-800 text-slate-500 font-bold">{rIdx + 1}</td>
+                      <tr key={rIdx} className="hover:bg-slate-50 transition">
+                        <td className="py-2 px-3 border-r border-slate-200 text-slate-400 font-bold">{rIdx + 1}</td>
                         {preview.headers.map((h, cIdx) => (
-                          <td key={cIdx} className="py-2 px-3 border-r border-slate-800 whitespace-nowrap text-slate-300">
+                          <td key={cIdx} className="py-2 px-3 border-r border-slate-200 whitespace-nowrap text-slate-800">
                             {row[h] !== undefined && row[h] !== null ? String(row[h]) : "-"}
                           </td>
                         ))}
@@ -346,27 +346,27 @@ const CsvImporter = ({ onSuccess }: CsvImporterProps) => {
 
       {/* Upload Results Summary Card */}
       {results && (
-        <div className="border border-slate-800 rounded-3xl p-5 space-y-4 bg-slate-950/80 shadow-inner">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+        <div className="border border-slate-200 rounded-3xl p-5 space-y-4 bg-white shadow-sm">
+          <h3 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">
             Ingestion Processing Summary
           </h3>
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-emerald-950/20 border border-emerald-800/30">
-              <div className="text-emerald-400">
+            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200">
+              <div className="text-emerald-600">
                 <CheckCircle2 size={20} />
               </div>
               <div>
-                <div className="text-xs text-slate-400 font-medium">Successfully Ingested</div>
-                <div className="text-xl font-bold text-slate-100">{results.success_count} profiles</div>
+                <div className="text-xs text-slate-600 font-semibold">Successfully Ingested</div>
+                <div className="text-xl font-bold text-slate-900">{results.success_count} profiles</div>
               </div>
             </div>
-            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-rose-950/20 border border-rose-800/30">
-              <div className="text-rose-400">
+            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-rose-50 border border-rose-200">
+              <div className="text-rose-600">
                 <AlertCircle size={20} />
               </div>
               <div>
-                <div className="text-xs text-slate-400 font-medium">Failed Discrepancies</div>
-                <div className="text-xl font-bold text-slate-100">{results.error_count} rows</div>
+                <div className="text-xs text-slate-600 font-semibold">Failed Discrepancies</div>
+                <div className="text-xl font-bold text-slate-900">{results.error_count} rows</div>
               </div>
             </div>
           </div>
@@ -374,10 +374,10 @@ const CsvImporter = ({ onSuccess }: CsvImporterProps) => {
           {/* Row error messages list */}
           {results.errors.length > 0 && (
             <div className="space-y-2">
-              <div className="text-xs font-semibold text-slate-400">Ingestion Discrepancy Logs:</div>
-              <div className="max-h-40 overflow-y-auto border border-slate-800 rounded-2xl p-3 bg-slate-900/60 space-y-1 text-slate-300 font-mono text-[11px]">
+              <div className="text-xs font-semibold text-slate-700">Ingestion Discrepancy Logs:</div>
+              <div className="max-h-40 overflow-y-auto border border-slate-200 rounded-2xl p-3 bg-slate-50 space-y-1 text-slate-800 font-mono text-[11px]">
                 {results.errors.map((err, idx) => (
-                  <div key={idx} className="flex gap-2 text-rose-400">
+                  <div key={idx} className="flex gap-2 text-rose-600">
                     <span>•</span>
                     <span>{err}</span>
                   </div>

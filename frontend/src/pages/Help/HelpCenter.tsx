@@ -19,7 +19,6 @@ import {
   Info,
   Sparkles
 } from "lucide-react";
-
 import MainLayout from "../../components/layout/MainLayout";
 import { SupportAPI } from "../../services/api";
 
@@ -30,7 +29,6 @@ const HelpCenter = () => {
   const [systemStatus, setSystemStatus] = useState<any>(null);
 
   useEffect(() => {
-    // Fetch live system status metrics
     SupportAPI.getSystemStatus()
       .then(res => setSystemStatus(res))
       .catch(() => {
@@ -132,7 +130,7 @@ const HelpCenter = () => {
         "Interactive 10-row CSV Data Preview before batch database insertion.",
         "Enterprise Help & Support Portal with structured Bug Reporting and Feature Request workflows.",
         "System Service Status endpoint with real-time latency monitoring.",
-        "Improved dark mode contrast, typography hierarchy, and accessibility landmarks."
+        "Improved high-contrast light mode styling and typography hierarchy."
       ]
     },
     {
@@ -151,30 +149,30 @@ const HelpCenter = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-8">
+      <div className="max-w-5xl mx-auto space-y-8 pb-12">
+        {/* Header Banner */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-6">
           <div>
-            <div className="flex items-center gap-2 text-blue-400 font-bold text-xs uppercase tracking-wider mb-2">
+            <div className="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider mb-1.5">
               <BookOpen size={16} />
               Enterprise Support & Knowledge Portal
             </div>
-            <h1 className="text-3xl font-extrabold text-slate-100 tracking-tight">Help Center & SLA Center</h1>
-            <p className="text-slate-400 text-sm mt-1.5 max-w-2xl">
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Help Center & SLAs</h1>
+            <p className="text-slate-600 text-sm mt-1 max-w-2xl">
               Complete documentation, user guides, troubleshooting, API references, and SRE support resources for AttriSense AI.
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 self-start md:self-auto">
             <Link
               to="/support"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-xl transition shadow-lg shadow-blue-600/20"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition shadow-sm"
             >
               <MessageSquare size={16} />
               Contact Support
             </Link>
             <Link
               to="/dashboard"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 font-semibold text-xs rounded-xl transition"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl transition shadow-sm"
             >
               <ArrowLeft size={16} />
               Dashboard
@@ -183,7 +181,7 @@ const HelpCenter = () => {
         </div>
 
         {/* Navigation Portal Tabs */}
-        <div className="flex flex-wrap items-center gap-2 border-b border-slate-800 pb-4">
+        <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-4">
           {[
             { id: "kb", label: "Knowledge Base & FAQs", icon: HelpCircle },
             { id: "guide", label: "User Guide & Docs", icon: BookOpen },
@@ -200,8 +198,8 @@ const HelpCenter = () => {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer ${
                   isActive
-                    ? "bg-blue-600 text-white shadow-md shadow-blue-600/20"
-                    : "bg-slate-900/60 border border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-850"
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "bg-white border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-50"
                 }`}
               >
                 <Icon size={15} />
@@ -216,7 +214,7 @@ const HelpCenter = () => {
           <div className="space-y-8">
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto">
-              <span className="absolute inset-y-0 left-4 flex items-center text-slate-500 pointer-events-none">
+              <span className="absolute inset-y-0 left-4 flex items-center text-slate-400 pointer-events-none">
                 <Search size={18} />
               </span>
               <input
@@ -224,7 +222,7 @@ const HelpCenter = () => {
                 placeholder="Search articles & FAQs (e.g. SHAP, MonthlyIncome, accuracy, GDPR)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-950/90 border border-slate-800 rounded-2xl py-3.5 pl-12 pr-4 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                className="w-full bg-white border border-slate-300 rounded-2xl py-3.5 pl-12 pr-4 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-sm transition"
               />
             </div>
 
@@ -236,8 +234,8 @@ const HelpCenter = () => {
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
                     selectedCategory === cat
-                      ? "bg-blue-500/20 text-blue-400 border border-blue-500/40"
-                      : "bg-slate-900/40 text-slate-400 hover:text-slate-200 border border-slate-800"
+                      ? "bg-blue-100 text-blue-800 border border-blue-300 font-bold"
+                      : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200"
                   }`}
                 >
                   {cat}
@@ -246,33 +244,33 @@ const HelpCenter = () => {
             </div>
 
             {/* Core Architectural Pillars */}
-            <div className="grid md:grid-cols-3 gap-5">
-              <div className="bg-slate-900/40 border border-slate-800 p-6 rounded-3xl space-y-3">
-                <div className="h-10 w-10 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-400">
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm space-y-3">
+                <div className="h-10 w-10 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-center text-blue-600">
                   <BrainCircuit size={20} />
                 </div>
-                <h3 className="text-sm font-bold text-slate-100">Predictive ML Engine</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <h3 className="text-sm font-bold text-slate-900">Predictive ML Engine</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
                   Random Forest ensemble analytics process 16 core metrics to produce 0-100% flight-risk probabilities.
                 </p>
               </div>
 
-              <div className="bg-slate-900/40 border border-slate-800 p-6 rounded-3xl space-y-3">
-                <div className="h-10 w-10 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-400">
+              <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm space-y-3">
+                <div className="h-10 w-10 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-indigo-600">
                   <Activity size={20} />
                 </div>
-                <h3 className="text-sm font-bold text-slate-100">SHAP Explainability</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <h3 className="text-sm font-bold text-slate-900">SHAP Explainability</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
                   Extract Shapley additive contributions to identify precise positive and negative drivers behind each employee score.
                 </p>
               </div>
 
-              <div className="bg-slate-900/40 border border-slate-800 p-6 rounded-3xl space-y-3">
-                <div className="h-10 w-10 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400">
+              <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm space-y-3">
+                <div className="h-10 w-10 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600">
                   <Shield size={20} />
                 </div>
-                <h3 className="text-sm font-bold text-slate-100">Enterprise Security</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <h3 className="text-sm font-bold text-slate-900">Enterprise Security</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
                   Strict Role-Based Access Controls (RBAC), TLS encryption, and encrypted audit logs safeguard workforce records.
                 </p>
               </div>
@@ -280,28 +278,28 @@ const HelpCenter = () => {
 
             {/* FAQs Accordion / List */}
             <div className="space-y-4">
-              <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                <HelpCircle size={18} className="text-blue-400" />
+              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <HelpCircle size={18} className="text-blue-600" />
                 Frequently Asked Questions ({filteredFaqs.length})
               </h2>
 
               <div className="space-y-4">
                 {filteredFaqs.length > 0 ? (
                   filteredFaqs.map((faq, index) => (
-                    <div key={index} className="bg-slate-900/40 border border-slate-800 rounded-2xl p-5 space-y-2.5">
+                    <div key={index} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-3">
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] uppercase font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded-md">
+                        <span className="text-[10px] uppercase font-extrabold bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-0.5 rounded-md">
                           {faq.category}
                         </span>
                       </div>
-                      <h3 className="text-sm font-bold text-slate-100">{faq.question}</h3>
-                      <p className="text-xs text-slate-400 leading-relaxed">{faq.answer}</p>
+                      <h3 className="text-sm font-bold text-slate-900">{faq.question}</h3>
+                      <p className="text-xs text-slate-600 leading-relaxed">{faq.answer}</p>
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-12 bg-slate-900/20 border border-dashed border-slate-800 rounded-2xl">
-                    <Search size={32} className="mx-auto text-slate-600 mb-3" />
-                    <p className="text-slate-400 text-xs">No articles match search term "{searchQuery}".</p>
+                  <div className="text-center py-12 bg-white border border-dashed border-slate-300 rounded-2xl">
+                    <Search size={32} className="mx-auto text-slate-400 mb-3" />
+                    <p className="text-slate-600 text-xs font-medium">No articles match search term "{searchQuery}".</p>
                   </div>
                 )}
               </div>
@@ -312,59 +310,59 @@ const HelpCenter = () => {
         {/* TAB 2: USER GUIDE & APPLICATION DOCS */}
         {activeTab === "guide" && (
           <div className="space-y-8">
-            <div className="bg-slate-900/40 border border-slate-800 rounded-3xl p-6 space-y-6">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-                <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                  <FileText size={20} className="text-blue-400" />
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+                <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <FileText size={20} className="text-blue-600" />
                   Application Documentation & Workflow Guides
                 </h2>
                 <a
                   href="/docs"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 font-semibold"
+                  className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-bold"
                 >
                   Interactive API Docs (Swagger) <ExternalLink size={12} />
                 </a>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm font-bold text-slate-200">
-                    <span className="h-6 w-6 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-xs">1</span>
+                <div className="space-y-2.5 bg-slate-50 p-5 rounded-2xl border border-slate-200/80">
+                  <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                    <span className="h-6 w-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">1</span>
                     Bulk CSV Ingestion Flow
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     Navigate to <b>Employees</b> page and click <b>Bulk Upload CSV</b>. Drop a CSV spreadsheet containing employee profiles. The parser auto-detects encoding (UTF-8, Latin-1) and delimiter, validating required fields like <i>MonthlyIncome</i>. Inspect the 10-row preview table before confirming ingestion.
                   </p>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm font-bold text-slate-200">
-                    <span className="h-6 w-6 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-xs">2</span>
+                <div className="space-y-2.5 bg-slate-50 p-5 rounded-2xl border border-slate-200/80">
+                  <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                    <span className="h-6 w-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">2</span>
                     Single Employee Prediction
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     Access the <b>Prediction</b> calculator tab. Input individual metrics (Age, Monthly Income, Overtime, Distance From Home, Work Life Balance). Click <b>Calculate Risk</b> to receive real-time probability outputs and personalized retention recommendations.
                   </p>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm font-bold text-slate-200">
-                    <span className="h-6 w-6 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-xs">3</span>
+                <div className="space-y-2.5 bg-slate-50 p-5 rounded-2xl border border-slate-200/80">
+                  <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                    <span className="h-6 w-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">3</span>
                     SHAP Factor Decomposition
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     On any employee details page or AI Insights view, examine the SHAP breakdown chart. Red bars signify factors elevating attrition risk (e.g. Overtime = Yes), while green bars denote stabilizing factors (e.g. MonthlyIncome = $12,000).
                   </p>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm font-bold text-slate-200">
-                    <span className="h-6 w-6 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-xs">4</span>
+                <div className="space-y-2.5 bg-slate-50 p-5 rounded-2xl border border-slate-200/80">
+                  <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                    <span className="h-6 w-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">4</span>
                     Report Generation & Exports
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     Download complete executive workforce briefings in PDF format or structured raw predictions in Excel format from the <b>Analytics</b> page or individual profile cards.
                   </p>
                 </div>
@@ -372,13 +370,13 @@ const HelpCenter = () => {
             </div>
 
             {/* Quick Links Card */}
-            <div className="bg-slate-950 border border-slate-800 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="bg-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
               <div>
-                <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <FileCode2 size={16} className="text-blue-400" />
                   REST API Developer Documentation
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-slate-300 mt-1">
                   Explore OpenAPI endpoints for programmatically submitting predictions, querying employee risk scores, and managing support tickets.
                 </p>
               </div>
@@ -386,7 +384,7 @@ const HelpCenter = () => {
                 href="/docs"
                 target="_blank"
                 rel="noreferrer"
-                className="px-4 py-2.5 bg-slate-900 hover:bg-slate-850 border border-slate-750 text-blue-400 font-semibold text-xs rounded-xl transition whitespace-nowrap flex items-center gap-1.5"
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition whitespace-nowrap flex items-center gap-1.5 shadow-sm"
               >
                 Open Swagger UI <ExternalLink size={14} />
               </a>
@@ -398,27 +396,27 @@ const HelpCenter = () => {
         {activeTab === "troubleshoot" && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                <Zap size={18} className="text-amber-400" />
+              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <Zap size={18} className="text-amber-500" />
                 Troubleshooting & Common Failure Resolutions
               </h2>
             </div>
 
             <div className="space-y-4">
               {troubleshootingItems.map((item, idx) => (
-                <div key={idx} className="bg-slate-900/40 border border-slate-800 rounded-3xl p-6 space-y-3">
-                  <h3 className="text-sm font-bold text-rose-400 flex items-center gap-2">
+                <div key={idx} className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4">
+                  <h3 className="text-sm font-bold text-rose-600 flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full bg-rose-500"></span>
                     {item.problem}
                   </h3>
                   <div className="grid md:grid-cols-2 gap-4 text-xs">
-                    <div className="bg-slate-950/60 p-3.5 rounded-2xl border border-slate-850">
-                      <span className="font-bold text-slate-300 block mb-1">Root Cause:</span>
-                      <span className="text-slate-400">{item.cause}</span>
+                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                      <span className="font-bold text-slate-800 block mb-1">Root Cause:</span>
+                      <span className="text-slate-600">{item.cause}</span>
                     </div>
-                    <div className="bg-blue-950/20 p-3.5 rounded-2xl border border-blue-800/30">
-                      <span className="font-bold text-blue-400 block mb-1">Resolution:</span>
-                      <span className="text-slate-300">{item.solution}</span>
+                    <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                      <span className="font-bold text-blue-900 block mb-1">Resolution:</span>
+                      <span className="text-slate-700">{item.solution}</span>
                     </div>
                   </div>
                 </div>
@@ -431,18 +429,18 @@ const HelpCenter = () => {
         {activeTab === "status" && (
           <div className="space-y-6">
             {/* System Availability Summary */}
-            <div className="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
                 <div>
-                  <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                    <Server size={20} className="text-emerald-400" />
+                  <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <Server size={20} className="text-emerald-600" />
                     Live System Availability & Health Status
                   </h2>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-slate-600 mt-1">
                     Real-time operational status for AttriSense AI production microservices.
                   </p>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 font-bold text-xs">
+                <div className="flex items-center gap-2 px-3.5 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-700 font-bold text-xs">
                   <CheckCircle2 size={14} />
                   All Systems Operational ({systemStatus?.overall_health || "100%"})
                 </div>
@@ -451,44 +449,44 @@ const HelpCenter = () => {
               {/* Service Cards */}
               <div className="grid sm:grid-cols-2 gap-4">
                 {systemStatus?.services?.map((svc: any, idx: number) => (
-                  <div key={idx} className="bg-slate-950/80 border border-slate-850 p-4 rounded-2xl flex items-center justify-between">
+                  <div key={idx} className="bg-slate-50 border border-slate-200 p-4 rounded-2xl flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                      <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                       <div>
-                        <div className="text-xs font-bold text-slate-200">{svc.name}</div>
-                        <div className="text-[11px] text-slate-400">Latency: {svc.latency}</div>
+                        <div className="text-xs font-bold text-slate-900">{svc.name}</div>
+                        <div className="text-[11px] text-slate-500">Latency: {svc.latency}</div>
                       </div>
                     </div>
-                    <span className="text-[10px] font-extrabold uppercase bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-md">
+                    <span className="text-[10px] font-extrabold uppercase bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md">
                       {svc.status}
                     </span>
                   </div>
                 )) || (
-                  <div className="text-xs text-slate-400">Loading service health status...</div>
+                  <div className="text-xs text-slate-500">Loading service health status...</div>
                 )}
               </div>
             </div>
 
             {/* SLA Guarantees Box */}
-            <div className="bg-slate-900/40 border border-slate-800 rounded-3xl p-6 space-y-4">
-              <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                <Clock size={16} className="text-blue-400" />
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4">
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <Clock size={16} className="text-blue-600" />
                 Response Time SLA & Support Hours
               </h3>
               <div className="grid md:grid-cols-3 gap-4 text-xs">
-                <div className="bg-slate-950 p-4 rounded-2xl border border-slate-850">
-                  <div className="text-slate-400 font-medium">Critical Priority SLA</div>
-                  <div className="text-lg font-bold text-slate-100 mt-1">15 Minutes</div>
+                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                  <div className="text-slate-500 font-semibold">Critical Priority SLA</div>
+                  <div className="text-lg font-extrabold text-slate-900 mt-1">15 Minutes</div>
                   <div className="text-[11px] text-slate-500 mt-1">24/7 Severity 1 Response</div>
                 </div>
-                <div className="bg-slate-950 p-4 rounded-2xl border border-slate-850">
-                  <div className="text-slate-400 font-medium">Standard Response SLA</div>
-                  <div className="text-lg font-bold text-slate-100 mt-1">4 Hours</div>
+                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                  <div className="text-slate-500 font-semibold">Standard Response SLA</div>
+                  <div className="text-lg font-extrabold text-slate-900 mt-1">4 Hours</div>
                   <div className="text-[11px] text-slate-500 mt-1">High & Medium Severity</div>
                 </div>
-                <div className="bg-slate-950 p-4 rounded-2xl border border-slate-850">
-                  <div className="text-slate-400 font-medium">Business Support Hours</div>
-                  <div className="text-sm font-bold text-slate-100 mt-1">Mon - Fri 9:00 AM - 6:00 PM EST</div>
+                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                  <div className="text-slate-500 font-semibold">Business Support Hours</div>
+                  <div className="text-xs font-extrabold text-slate-900 mt-1">Mon - Fri 9:00 AM - 6:00 PM EST</div>
                   <div className="text-[11px] text-slate-500 mt-1">Dedicated Technical Support</div>
                 </div>
               </div>
@@ -499,27 +497,27 @@ const HelpCenter = () => {
         {/* TAB 5: RELEASE NOTES */}
         {activeTab === "releases" && (
           <div className="space-y-6">
-            <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-              <Sparkles size={18} className="text-blue-400" />
+            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <Sparkles size={18} className="text-blue-600" />
               Platform Release Notes & Product Versioning
             </h2>
 
             <div className="space-y-6">
               {releaseNotes.map((rel, idx) => (
-                <div key={idx} className="bg-slate-900/40 border border-slate-800 rounded-3xl p-6 space-y-4">
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div key={idx} className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4">
+                  <div className="flex items-center justify-between border-b border-slate-200 pb-3">
                     <div className="flex items-center gap-3">
-                      <span className="text-base font-extrabold text-slate-100">{rel.version}</span>
-                      <span className="text-[10px] uppercase font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded-md">
+                      <span className="text-base font-extrabold text-slate-900">{rel.version}</span>
+                      <span className="text-[10px] uppercase font-extrabold bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-0.5 rounded-md">
                         {rel.tag}
                       </span>
                     </div>
-                    <span className="text-xs text-slate-400">{rel.date}</span>
+                    <span className="text-xs text-slate-500 font-medium">{rel.date}</span>
                   </div>
-                  <ul className="space-y-2 text-xs text-slate-300">
+                  <ul className="space-y-2.5 text-xs text-slate-700">
                     {rel.features.map((feat, fIdx) => (
-                      <li key={fIdx} className="flex items-start gap-2">
-                        <CheckCircle2 size={14} className="text-blue-400 mt-0.5 shrink-0" />
+                      <li key={fIdx} className="flex items-start gap-2.5">
+                        <CheckCircle2 size={15} className="text-blue-600 mt-0.5 shrink-0" />
                         <span>{feat}</span>
                       </li>
                     ))}
@@ -533,19 +531,19 @@ const HelpCenter = () => {
         {/* TAB 6: ABOUT & LEGAL */}
         {activeTab === "about" && (
           <div className="space-y-6">
-            <div className="bg-slate-900/40 border border-slate-800 rounded-3xl p-6 space-y-4">
-              <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                <Info size={18} className="text-blue-400" />
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-4">
+              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <Info size={18} className="text-blue-600" />
                 About AttriSense AI
               </h2>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-slate-700 leading-relaxed">
                 AttriSense AI is an enterprise decision-intelligence platform engineered to predict employee attrition risk, explain risk metrics with SHAP values, and prescribe targeted retention actions. Built with FastAPI, PyTorch, Scikit-Learn, and React.
               </p>
-              <div className="flex flex-wrap gap-4 pt-2 border-t border-slate-800 text-xs">
-                <Link to="/legal" className="text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1">
+              <div className="flex flex-wrap gap-4 pt-3 border-t border-slate-200 text-xs">
+                <Link to="/legal" className="text-blue-600 hover:text-blue-700 font-bold flex items-center gap-1">
                   Privacy Policy <ExternalLink size={12} />
                 </Link>
-                <Link to="/legal" className="text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1">
+                <Link to="/legal" className="text-blue-600 hover:text-blue-700 font-bold flex items-center gap-1">
                   Terms of Service <ExternalLink size={12} />
                 </Link>
               </div>
@@ -554,19 +552,19 @@ const HelpCenter = () => {
         )}
 
         {/* Contact CTA Banner */}
-        <div className="bg-gradient-to-r from-blue-950/40 to-indigo-950/40 border border-blue-800/30 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="bg-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1.5 text-center md:text-left">
-            <h3 className="text-base font-bold text-slate-100 flex items-center justify-center md:justify-start gap-2">
+            <h3 className="text-base font-bold text-white flex items-center justify-center md:justify-start gap-2">
               <MessageSquare size={18} className="text-blue-400" />
               Need Technical Assistance or Custom Enterprise SLAs?
             </h3>
-            <p className="text-xs text-slate-400 max-w-lg">
+            <p className="text-xs text-slate-300 max-w-lg">
               Our SRE and customer success engineering teams are available to assist with custom integrations, dataset ingestions, and hotfixes.
             </p>
           </div>
           <Link
             to="/support"
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white rounded-xl text-xs font-bold transition whitespace-nowrap shadow-lg shadow-blue-600/20 cursor-pointer"
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white rounded-xl text-xs font-bold transition whitespace-nowrap shadow-sm cursor-pointer"
           >
             Contact Support Team
           </Link>
