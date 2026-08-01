@@ -129,6 +129,25 @@ const CsvImporter = ({ onSuccess }: CsvImporterProps) => {
     setResults(null);
   };
 
+  const formatErrorMessage = (err: any): string => {
+    if (!err) return "Failed to process CSV file.";
+    if (err.code === "ECONNABORTED") {
+      return "Upload request timed out while processing calculations. Please retry or try a smaller CSV batch.";
+    }
+    if (!err.response) {
+      return "Unable to reach server. Please check your network connection or backend API status.";
+    }
+    const detail = err.response.data?.detail;
+    if (typeof detail === "string") return detail;
+    if (Array.isArray(detail)) {
+      return detail.map((d: any) => (typeof d === "string" ? d : d.msg || JSON.stringify(d))).join(", ");
+    }
+    if (typeof detail === "object" && detail !== null) {
+      return detail.message || JSON.stringify(detail);
+    }
+    return err.message || "Failed to process CSV file.";
+  };
+
   const handleUpload = async () => {
     if (!file || !preview?.valid) return;
     setLoading(true);
@@ -147,7 +166,7 @@ const CsvImporter = ({ onSuccess }: CsvImporterProps) => {
       }
       onSuccess();
     } catch (err: any) {
-      const errorMsg = err.response?.data?.detail || "Failed to process CSV file.";
+      const errorMsg = formatErrorMessage(err);
       toast.error(errorMsg, { id: toastId });
     } finally {
       setLoading(false);
