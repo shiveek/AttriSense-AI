@@ -220,17 +220,40 @@ def seed_database():
     finally:
         db.close()
 
+def check_and_migrate_db_schema():
+    """
+    Verifies and auto-migrates database columns (e.g. location, manager_name) if missing in existing tables.
+    """
+    try:
+        from sqlalchemy import inspect, text
+        inspector = inspect(engine)
+        if "employees" in inspector.get_table_names():
+            columns = [c["name"] for c in inspector.get_columns("employees")]
+            with engine.begin() as conn:
+                if "location" not in columns:
+                    logger.info("Auto-migrating employees table: adding 'location' column...")
+                    conn.execute(text("ALTER TABLE employees ADD COLUMN location VARCHAR DEFAULT 'HQ'"))
+                if "manager_name" not in columns:
+                    logger.info("Auto-migrating employees table: adding 'manager_name' column...")
+                    conn.execute(text("ALTER TABLE employees ADD COLUMN manager_name VARCHAR DEFAULT 'N/A'"))
+    except Exception as e:
+        logger.warning(f"Database schema auto-migration check notice: {str(e)}")
+
 @app.on_event("startup")
 def startup_event():
     # 1. Create tables if they don't exist
     logger.info("Initializing database tables...")
     Base.metadata.create_all(bind=engine)
+
+    # 2. Check and migrate database columns
+    check_and_migrate_db_schema()
     
-    # 2. Seed database
+    # 3. Seed database
     seed_database()
 
-    # 3. Warm up model cache
+    # 4. Warm up model cache
     logger.info("Warming up predictive ML model cache...")
+
     try:
         from backend.app.services.prediction_service import get_model_data
         get_model_data()
