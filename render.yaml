@@ -1,8 +1,7 @@
 services:
-  # --- Backend FastAPI Web Service ---
   - type: web
     name: attrisense-backend
-    env: python
+    runtime: python
     region: oregon
     plan: free
     buildCommand: pip install -r requirements.txt
@@ -21,20 +20,3 @@ services:
         value: "https://attrisense-ai.vercel.app,http://localhost:5173,http://localhost:3000"
       - key: DATABASE_URL
         value: sqlite:///./attrisense.db
-
-  # --- Frontend Static Site (Vercel primary, Render static fallback) ---
-  - type: static
-    name: attrisense-frontend
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
-    envVars:
-      - key: VITE_API_URL
-        fromService:
-          type: web
-          name: attrisense-backend
-          property: url
-          postfix: /api
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
